@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    short_player.xml
+    Main layout for ShortPlayerActivity.
+    Contains a full-screen ViewPager2 (vertical) for swiping between shorts,
+    a top status bar with title / search / more-options icons,
+    and a centred loading indicator shown while the initial short list loads.
+-->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
+
+    <!-- ------------------------------------------------------------------ -->
+    <!--  ViewPager2 — full-screen vertical swipe between shorts            -->
+    <!-- ------------------------------------------------------------------ -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" />
+
+    <!-- ------------------------------------------------------------------ -->
+    <!--  Loading indicator — visible until the first page is ready         -->
+    <!-- ------------------------------------------------------------------ -->
+    <ProgressBar
+        android:id="@+id/loadingIndicator"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminateTint="@android:color/white"
+        android:visibility="visible" />
+
+    <!-- ------------------------------------------------------------------ -->
+    <!--  Top bar overlay — "Shorts" title + search + more-options          -->
+    <!-- ------------------------------------------------------------------ -->
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:gravity="center_vertical"
+        android:background="#33000000">
+
+        <!-- "Shorts" label -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Shorts"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium" />
+
+        <!-- Search icon -->
+        <ImageView
+            android:id="@+id/btnSearch"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@android:drawable/ic_menu_search"
+            android:tint="@android:color/white"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="Search"
+            android:padding="4dp" />
+
+        <!-- More-options icon (three vertical dots) -->
+        <ImageView
+            android:id="@+id/btnMore"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@android:drawable/ic_menu_more"
+            android:tint="@android:color/white"
+            android:contentDescription="More options"
+            android:padding="4dp" />
+
+    </LinearLayout>
+
+</FrameLayout>
