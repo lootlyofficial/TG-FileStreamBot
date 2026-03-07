@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    item_short.xml
+    Layout for a single short-video page inside the ViewPager2.
+
+    Layer order (bottom → top):
+      1. PlayerView               – full-screen video (RESIZE_MODE_ZOOM)
+      2. Thumbnail ImageView      – shown while player is buffering; fades out when ready
+      3. Bottom gradient View     – dark gradient for text readability
+      4. Right-side action panel  – avatar · like · dislike · comment · share
+      5. Bottom info overlay      – channel info + title + description
+      6. Progress bar             – thin line at very bottom
+      7. Speed overlay            – "2x ▶▶" shown during long-press
+      8. Pause icon               – shown briefly on single-tap pause
+
+    Dependencies (add to build.gradle if not already present):
+        implementation "de.hdodenhof:circleimageview:3.1.0"
+        implementation "com.github.bumptech.glide:glide:4.x.x"
+        implementation "com.google.android.exoplayer:exoplayer:2.x.x"
+-->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
+
+    <!-- ------------------------------------------------------------------ -->
+    <!-- 1. Full-screen ExoPlayer view                                       -->
+    <!-- ------------------------------------------------------------------ -->
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/playerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:resize_mode="zoom"
+        app:use_controller="false"
+        app:surface_type="texture_view"
+        android:background="@android:color/black" />
+
+    <!-- ------------------------------------------------------------------ -->
+    <!-- 2. Thumbnail placeholder (fades out when player is ready)           -->
+    <!-- ------------------------------------------------------------------ -->
+    <ImageView
+        android:id="@+id/thumbnail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:alpha="1.0"
+        android:contentDescription="Video thumbnail" />
+
+    <!-- ------------------------------------------------------------------ -->
+    <!-- 3. Dark gradient overlay at the bottom for text readability         -->
+    <!--    Implemented as a simple semi-transparent black View that fades   -->
+    <!--    via a gradient-like effect from transparent → #AA000000.         -->
+    <!-- ------------------------------------------------------------------ -->
+    <View
+        android:id="@+id/bottomGradient"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/gradient_bottom" />
+
+    <!-- ------------------------------------------------------------------ -->
+    <!-- 4. Right-side action panel                                          -->
+    <!-- ------------------------------------------------------------------ -->
+    <LinearLayout
+        android:id="@+id/rightButtons"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="80dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <!-- Channel avatar (right rail) + subscribe (+) badge -->
+        <FrameLayout
+            android:layout_width="52dp"
+            android:layout_height="62dp"
+            android:layout_marginBottom="20dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/channelAvatarRight"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="top|center_horizontal"
+                android:src="@android:drawable/ic_menu_camera" />
+
+            <!-- Red "+" subscribe badge, centred below the avatar -->
+            <ImageView
+                android:id="@+id/subscribeIconRight"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="bottom|center_horizontal"
+                android:src="@android:drawable/ic_input_add"
+                android:tint="@android:color/white"
+                android:background="@drawable/circle_bg_red"
+                android:padding="3dp"
+                android:contentDescription="Subscribe" />
+        </FrameLayout>
+
+        <!-- ---- Like ---- -->
+        <ImageView
+            android:id="@+id/btnLike"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@android:drawable/btn_star_big_off"
+            android:tint="@android:color/white"
+            android:contentDescription="Like" />
+
+        <TextView
+            android:id="@+id/tvLikeCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp" />
+
+        <!-- ---- Dislike ---- -->
+        <ImageView
+            android:id="@+id/btnDislike"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@android:drawable/btn_star_big_off"
+            android:tint="@android:color/white"
+            android:rotation="180"
+            android:contentDescription="Dislike" />
+
+        <TextView
+            android:id="@+id/tvDislikeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dislike"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp" />
+
+        <!-- ---- Comment ---- -->
+        <ImageView
+            android:id="@+id/btnComment"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@android:drawable/ic_menu_send"
+            android:tint="@android:color/white"
+            android:contentDescription="Comments" />
+
+        <TextView
+            android:id="@+id/tvCommentCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp" />
+
+        <!-- ---- Share ---- -->
+        <ImageView
+            android:id="@+id/btnShare"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@android:drawable/ic_menu_share"
+            android:tint="@android:color/white"
+            android:contentDescription="Share" />
+
+        <TextView
+            android:id="@+id/tvShareLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Share"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="4dp" />
+
+    </LinearLayout>
+
+    <!-- ------------------------------------------------------------------ -->
+    <!-- 5. Bottom info overlay — channel info + title + description         -->
+    <!-- ------------------------------------------------------------------ -->
+    <LinearLayout
+        android:id="@+id/bottomOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginEnd="72dp"
+        android:layout_marginBottom="16dp"
+        android:orientation="vertical"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
+
+        <!-- Channel info row: avatar · name · subscribe button -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/channelAvatar"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="8dp"
+                android:src="@android:drawable/ic_menu_camera"
+                android:contentDescription="Channel avatar" />
+
+            <TextView
+                android:id="@+id/channelName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@creator"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <Button
+                android:id="@+id/btnSubscribe"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:text="Subscribe"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:textAllCaps="false"
+                android:backgroundTint="#CC000000"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp" />
+
+        </LinearLayout>
+
+        <!-- Video title (2-line truncation, tap to show description) -->
+        <TextView
+            android:id="@+id/videoTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:layout_marginBottom="4dp" />
+
+        <!-- Description — collapsed to 1 line; tap to expand -->
+        <TextView
+            android:id="@+id/videoDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#CCFFFFFF"
+            android:textSize="12sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <!-- ------------------------------------------------------------------ -->
+    <!-- 6. Thin progress bar — very bottom of screen                        -->
+    <!-- ------------------------------------------------------------------ -->
+    <ProgressBar
+        android:id="@+id/videoProgress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_gravity="bottom"
+        android:max="100"
+        android:progress="0"
+        android:progressTint="#FF0000"
+        android:progressBackgroundTint="#55FFFFFF" />
+
+    <!-- ------------------------------------------------------------------ -->
+    <!-- 7. Speed overlay — displayed during long-press (2×)                 -->
+    <!-- ------------------------------------------------------------------ -->
+    <TextView
+        android:id="@+id/speedOverlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="2x ▶▶"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:background="#80000000"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:visibility="gone" />
+
+    <!-- ------------------------------------------------------------------ -->
+    <!-- 8. Pause icon — briefly shown on single-tap pause                   -->
+    <!-- ------------------------------------------------------------------ -->
+    <ImageView
+        android:id="@+id/pauseIcon"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_gravity="center"
+        android:src="@android:drawable/ic_media_pause"
+        android:alpha="0.85"
+        android:background="#55000000"
+        android:padding="12dp"
+        android:contentDescription="Paused"
+        android:visibility="gone" />
+
+</FrameLayout>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    gradient_bottom.xml
+    A vertical gradient that goes from transparent at the top to semi-opaque
+    black at the bottom. Used as the background for the bottom overlay in
+    item_short.xml to ensure white text is readable over any video frame.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:type="linear"
+        android:angle="270"
+        android:startColor="#00000000"
+        android:endColor="#CC000000" />
+</shape>
